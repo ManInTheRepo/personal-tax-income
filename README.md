@@ -20,6 +20,9 @@ Includes unit tests and a historical reference to the original Java version (see
 ```bash
 git clone https://github.com/<your-username>/personal-tax-income.git
 cd personal-tax-income
+
 ### 2. Run the API
+
+```bash
 cd Tax.Api
 dotnet run
