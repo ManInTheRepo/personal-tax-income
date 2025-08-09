@@ -20,45 +20,44 @@ Includes unit tests and a historical reference to the original Java version (see
 ```bash
 git clone https://github.com/<your-username>/personal-tax-income.git
 cd personal-tax-income
+```
 
 ### 2. Run the API
 ```bash
 cd Tax.Api
 dotnet run
-``` bash
-curl -X GET "http://localhost:5000/api/tax?income=90000"
+```
 
 ### 3. Example request
-
 ```bash
-{
-  "income": 90000,
-  "tax": 18942,
-  "netIncome": 71058
-}
+curl -X GET "http://localhost:5000/api/tax?income=90000"
+```
 
-### 4. Example response:
+### 4. Example response
 ```json
 {
   "income": 90000,
   "tax": 18942,
   "netIncome": 71058
 }
+```
 
-### 5. Running Test
-
+### 5. Running Tests
 ```bash
 dotnet test
-
-### 4. Project Structure
-Tax.Api       – API endpoints
-Tax.Domain    – Core tax calculation logic
-Tax.Tests     – Unit tests
-docs/legacy-java – Original Java source (historical reference)
+```
 
 ---
 
+## Project Structure
+```
+Tax.Api         – API endpoints
+Tax.Domain      – Core tax calculation logic
+Tax.Tests       – Unit tests
+docs/legacy-java – Original Java source (historical reference)
+```
 
+---
 
-
-
+## License
+MIT – See [LICENSE](LICENSE) for details.
