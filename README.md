@@ -26,3 +26,27 @@ cd personal-tax-income
 ```bash
 cd Tax.Api
 dotnet run
+``` bash
+curl -X GET "http://localhost:5000/api/tax?income=90000"
+
+```bash
+{
+  "income": 90000,
+  "tax": 18942,
+  "netIncome": 71058
+}
+
+```bash
+dotnet test
+
+Tax.Api       – API endpoints
+Tax.Domain    – Core tax calculation logic
+Tax.Tests     – Unit tests
+docs/legacy-java – Original Java source (historical reference)
+
+---
+
+
+
+
+
