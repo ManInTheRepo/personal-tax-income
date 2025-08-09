@@ -22,12 +22,13 @@ git clone https://github.com/<your-username>/personal-tax-income.git
 cd personal-tax-income
 
 ### 2. Run the API
-
 ```bash
 cd Tax.Api
 dotnet run
 ``` bash
 curl -X GET "http://localhost:5000/api/tax?income=90000"
+
+### 3. Example request
 
 ```bash
 {
@@ -36,9 +37,20 @@ curl -X GET "http://localhost:5000/api/tax?income=90000"
   "netIncome": 71058
 }
 
+### 4. Example response:
+```json
+{
+  "income": 90000,
+  "tax": 18942,
+  "netIncome": 71058
+}
+
+### 5. Running Test
+
 ```bash
 dotnet test
 
+### 4. Project Structure
 Tax.Api       – API endpoints
 Tax.Domain    – Core tax calculation logic
 Tax.Tests     – Unit tests
