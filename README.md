@@ -37,8 +37,8 @@ curl -X GET "http://localhost:5000/api/tax?income=90000"
 ```json
 {
   "income": 90000,
-  "tax": 18942,
-  "netIncome": 71058
+  "tax": 17788.00,
+  "netIncome": 72212.00
 }
 ```
 
