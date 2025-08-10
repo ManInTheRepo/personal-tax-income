@@ -45,13 +45,10 @@ curl -X GET "http://localhost:5000/api/tax?income=90000"
 ```
 > **Note:** Figures shown exclude the Medicare levy and any applicable tax offsets.
 
-```
-
 ### 5. Running Tests
 ```bash
 dotnet test
 ```
-
 ---
 
 ## Project Structure
