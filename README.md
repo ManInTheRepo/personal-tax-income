@@ -1,3 +1,5 @@
+![ci](https://github.com/ManInTheRepo/personal-tax-income/actions/workflows/ci.yml/badge.svg)
+
 # Personal Tax Income Calculator – AU 2024–25
 
 A simple **.NET 8** API for calculating **Australian resident personal income tax** for the **2024–25 financial year**, **without Medicare levy** in v1.  
