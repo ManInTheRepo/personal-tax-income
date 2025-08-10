@@ -43,6 +43,9 @@ curl -X GET "http://localhost:5000/api/tax?income=90000"
   "netIncome": 72212.00
 }
 ```
+> **Note:** Figures shown exclude the Medicare levy and any applicable tax offsets.
+
+```
 
 ### 5. Running Tests
 ```bash
