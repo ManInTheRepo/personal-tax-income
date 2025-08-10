@@ -45,7 +45,17 @@ curl -X GET "http://localhost:5000/api/tax?income=90000"
 ```
 > **Note:** Figures shown exclude the Medicare levy and any applicable tax offsets.
 
-### 5. Running Tests
+### 5. Boundary examples (FY2024–25, no Medicare levy)
+
+| Taxable Income | Tax Payable | Net Income |
+|---------------:|------------:|-----------:|
+| $45,000        | $4,288.00   | $40,712.00 |
+| $90,000        | $17,788.00  | $72,212.00 |
+| $135,000       | $31,288.00  | $103,712.00 |
+| $190,000       | $51,638.00  | $138,362.00 |
+| $200,000       | $56,138.00  | $143,862.00 |
+
+### 6. Running Tests
 ```bash
 dotnet test
 ```
