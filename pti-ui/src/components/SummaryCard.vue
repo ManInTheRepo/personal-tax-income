@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import type { TaxBreakDown } from '@/types/tax';
-const props = defineProps<{ summary: TaxBreakDown }>();
+import { useTaxStore } from '@/stores/tax'
+const store = useTaxStore()
 </script>
 
 <template>
-  <div style="border:1px solid #ddd; padding:12px; border-radius:8px; max-width:420px">
+  <div v-if="store.summary" style="border:1px solid #ddd; padding:12px; border-radius:8px; max-width:420px">
     <h3>Tax Summary</h3>
     <ul>
-      <li>Taxable income: {{ props.summary.taxableIncome.toLocaleString() }}</li>
-      <li>Estimated tax: {{ props.summary.estimatedTax.toLocaleString() }}</li>
-      <li v-if="props.summary.medicareLevy !== undefined">Medicare levy: {{ props.summary.medicareLevy.toLocaleString() }}</li>
-      <li><strong>Net income: {{ props.summary.netIncome.toLocaleString() }}</strong></li>
+      <li>Taxable income: {{ store.summary.taxableIncome.toLocaleString() }}</li>
+      <li>Estimated tax: {{ store.summary.estimatedTax.toLocaleString() }}</li>
+      <li v-if="store.summary.medicareLevy !== undefined">Medicare levy: {{ store.summary.medicareLevy.toLocaleString() }}</li>
+      <li><strong>Net income: {{ store.summary.netIncome.toLocaleString() }}</strong></li>
     </ul>
   </div>
+  <p v-else>No summary yet — add income to calculate.</p>
 </template>

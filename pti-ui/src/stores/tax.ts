@@ -7,7 +7,8 @@ export const useTaxStore = defineStore('tax', {
     income: [] as IncomeItem[],
     summary: null as TaxBreakDown | null,
     loading: false,
-    error: '' as string | ''
+    error: '' as string | '',
+    count: 0
   }),
   actions: {
     async load() {
