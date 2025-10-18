@@ -4,7 +4,8 @@ using Tax.Domain.Schedules;
 
 namespace Tax.Tests;
 
-public class BoundaryTests_Au_2024_25
+public class BoundaryTestAu202425
+
 {
     private readonly ProgressiveTaxCalculator _calc = new();
 
