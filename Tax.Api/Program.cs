@@ -14,7 +14,7 @@ app.MapPost("/calculate", (CalculateRequest req, ITaxCalculator calc) =>
     if (req.TaxableIncome < 0) return Results.BadRequest("Income cannot be negative.");
 
     // v1: fixed schedule AU 2024–25 resident, no levy
-    var tax = calc.Calculate(req.TaxableIncome, Au_2024_25.Brackets);
+    var tax = calc.Calculate(req.TaxableIncome, Au202425.Brackets);
     var effectiveRate = req.TaxableIncome == 0 ? 0 : tax / req.TaxableIncome;
 
     var resp = new CalculateResponse

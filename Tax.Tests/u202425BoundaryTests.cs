@@ -18,7 +18,7 @@ public class Au2024_25_BoundaryTests
     [InlineData(200_000,  56_138)]
     public void Boundaries_ReturnExpectedTax(decimal income, decimal expectedTax)
     {
-        var actual = _calc.Calculate(income, Au_2024_25.Brackets);
+        var actual = _calc.Calculate(income, Au202425.Brackets);
         Assert.Equal(expectedTax, decimal.Round(actual, 2));
     }
 }
