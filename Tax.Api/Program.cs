@@ -9,31 +9,17 @@ var app = builder.Build();
 
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
-app.MapPost("/calculate", (CalculateRequest req, ITaxCalculator calc) =>
+app.MapGet("/api/tax", (decimal taxableIncome, ITaxCalculator calc) =>
 {
-    if (req.TaxableIncome < 0) return Results.BadRequest("Income cannot be negative.");
+    if (taxableIncome < 0) return Results.BadRequest("Income cannot be negative.");
 
     // v1: fixed schedule AU 2024–25 resident, no levy
-    var tax = calc.Calculate(req.TaxableIncome, Au202425.Brackets);
-    var effectiveRate = req.TaxableIncome == 0 ? 0 : tax / req.TaxableIncome;
+    var tax = calc.Calculate(taxableIncome, Au202425.Brackets);
+    var netIncome = taxableIncome - tax;
 
-    var resp = new CalculateResponse
-    {
-        Income = req.TaxableIncome,
-        Tax = tax,
-        EffectiveRate = decimal.Round(effectiveRate, 6, MidpointRounding.AwayFromZero)
-    };
+    var resp = new { NetIncome = decimal.Round(netIncome, 2, MidpointRounding.AwayFromZero) };
 
     return Results.Ok(resp);
 });
 
 app.Run();
-
-public sealed record CalculateRequest(decimal TaxableIncome);
-
-public sealed record CalculateResponse
-{
-    public decimal Income { get; init; }
-    public decimal Tax { get; init; }
-    public decimal EffectiveRate { get; init; } // e.g. 0.280690
-}
