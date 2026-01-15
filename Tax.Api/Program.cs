@@ -62,28 +62,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Enrich logs with per-request UserId when available (from header or authenticated principal)
-app.Use(async (context, next) =>
-{
-    var userId = context.Request.Headers["X-User-Id"].FirstOrDefault();
-    if (string.IsNullOrEmpty(userId))
-    {
-        userId = context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    }
-
-    if (!string.IsNullOrEmpty(userId))
-    {
-        using (LogContext.PushProperty("UserId", userId))
-        {
-            await next();
-        }
-    }
-    else
-    {
-        await next();
-    }
-});
-
 static bool DeterministicSample(string traceId, double rate)
 {
     if (rate <= 0) return false;
@@ -99,6 +77,32 @@ static bool DeterministicSample(string traceId, double rate)
     var sampleScore = val / (double)ulong.MaxValue;
     return sampleScore < rate;
 }
+
+// Enrich logs with per-request UserId when available (from header or authenticated principal)
+app.Use(async (context, next) =>
+{
+    var userId = context.Request.Headers["X-User-Id"].FirstOrDefault();
+    if (string.IsNullOrEmpty(userId))
+    {
+        userId = context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    }
+
+    var msLogger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+
+    if (!string.IsNullOrEmpty(userId))
+    {
+        // push both Serilog LogContext and Microsoft ILogger scope for compatibility and testing
+        using (LogContext.PushProperty("UserId", userId))
+        using (msLogger.BeginScope(new System.Collections.Generic.Dictionary<string, object?> { ["UserId"] = userId }))
+        {
+            await next();
+        }
+    }
+    else
+    {
+        await next();
+    }
+});
 
 // Detailed HTTP logging middleware with configurable body limit and sampling (deterministic)
 app.Use(async (context, next) =>
@@ -310,3 +314,6 @@ public sealed record GetTaxResponse
     public decimal NetIncome { get; init; }
     public decimal EffectiveRate { get; init; }
 }
+
+// Expose Program type for integration tests
+public partial class Program { }
