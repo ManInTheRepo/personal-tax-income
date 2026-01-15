@@ -2,6 +2,8 @@ using System.Text.Json;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -59,7 +61,23 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Detailed HTTP logging middleware with configurable body limit and sampling
+static bool DeterministicSample(string traceId, double rate)
+{
+    if (rate <= 0) return false;
+    if (rate >= 1) return true;
+
+    // Hash the traceId and map to [0,1)
+    using var sha = SHA256.Create();
+    var hash = sha.ComputeHash(Encoding.UTF8.GetBytes(traceId ?? string.Empty));
+    // Use first 8 bytes for a deterministic 64-bit value
+    if (hash.Length < 8) return false;
+    var val = BitConverter.ToUInt64(hash, 0);
+    // normalize to [0,1)
+    var sampleScore = val / (double)ulong.MaxValue;
+    return sampleScore < rate;
+}
+
+// Detailed HTTP logging middleware with configurable body limit and sampling (deterministic)
 app.Use(async (context, next) =>
 {
     var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
@@ -69,7 +87,7 @@ app.Use(async (context, next) =>
 
     // Determine if we should capture full bodies for this request
     var forced = context.Request.Headers.ContainsKey("X-Debug-Log") || context.Request.Query.ContainsKey("debugLog");
-    var sampled = Random.Shared.NextDouble() < httpBodySamplingRate;
+    var sampled = DeterministicSample(traceId, httpBodySamplingRate);
     var captureBody = forced || sampled;
 
     using (LogContext.PushProperty("TraceId", traceId))
