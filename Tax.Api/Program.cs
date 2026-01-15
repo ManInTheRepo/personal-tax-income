@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Serilog.Context;
+using System.Security.Claims;
 using Tax.Domain.Services;
 using Tax.Domain.Schedules;
 
@@ -60,6 +61,28 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Enrich logs with per-request UserId when available (from header or authenticated principal)
+app.Use(async (context, next) =>
+{
+    var userId = context.Request.Headers["X-User-Id"].FirstOrDefault();
+    if (string.IsNullOrEmpty(userId))
+    {
+        userId = context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    }
+
+    if (!string.IsNullOrEmpty(userId))
+    {
+        using (LogContext.PushProperty("UserId", userId))
+        {
+            await next();
+        }
+    }
+    else
+    {
+        await next();
+    }
+});
 
 static bool DeterministicSample(string traceId, double rate)
 {
