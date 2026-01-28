@@ -17,7 +17,7 @@ namespace Tax.Domain.Schedules;
 /// 135,000 => 31,288
 /// 190,000 => 51,638
 /// </summary>
-public static class Au_2024_25
+public static class Au202425
 {
     public static IReadOnlyList<TaxBracket> Brackets { get; } = new[]
     {
