@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/0.5.92">
+  <PropertyGroup>
+    <!-- Makes VS treat this as a Node/JS project -->
+    <JavaScriptProjectType>nodeJs</JavaScriptProjectType>
+
+    <!-- What F5/Debug runs -->
+    <StartupCommand>npm run dev</StartupCommand>
+    <DebuggerWorkingDirectory>$(MSBuildProjectDirectory)</DebuggerWorkingDirectory>
+  </PropertyGroup>
+
+  <!-- Show everything except node_modules/dist -->
+  <ItemGroup>
+    <Content Include="**\*" Exclude="node_modules\**;dist\**;**\*.vc.db" />
+  </ItemGroup>
+
+  <!-- Let Ctrl+Shift+B (Build) do a production build -->
+  <Target Name="Build">
+    <Exec Command="npm ci" />
+    <Exec Command="npm run build" />
+  </Target>
+
+  <!-- Optional: Clean -->
+  <Target Name="Clean">
+    <RemoveDir Directories="dist" />
+  </Target>
+</Project>
